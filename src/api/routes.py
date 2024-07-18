@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-
+from api.dict_ai import get_word_info
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -20,3 +20,9 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@api.route('/definition/<word>', methods=['GET'])
+def get_word(word):
+    if word:
+        return jsonify({'data': get_word_info(word)}), 200
+    return jsonify({'error': 'A word has to be provided'})
